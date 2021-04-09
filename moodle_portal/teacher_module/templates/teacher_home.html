@@ -1,0 +1,270 @@
+<html>
+
+<head>
+
+    <title>
+        Moodle-Portal
+    </title>
+
+    {% load static %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+
+<style>
+    .vertical-nav {
+        min-width: 17rem;
+        width: 20rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s;
+    }
+    
+    .page-content {
+        width: calc(100% - 20rem);
+        margin-left: 20rem;
+        transition: all 0.4s;
+    }
+    
+    #sidebar.active {
+        margin-left: -20rem;
+    }
+    
+    #content.active {
+        width: 100%;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        #sidebar {
+            margin-left: -20rem;
+        }
+        #sidebar.active {
+            margin-left: 0;
+        }
+        #content {
+            width: 100%;
+            margin: 0;
+        }
+        #content.active {
+            margin-left: 17rem;
+            width: calc(100% - 20rem);
+        }
+    }
+    
+    body {
+        background-color: #e4e4e2;
+    }
+    
+    .separator {
+        margin: 3rem 0;
+        border-bottom: 1px dashed #fff;
+    }
+    
+    .text-uppercase {
+        letter-spacing: 0.1em;
+    }
+    
+    .text-gray {
+        color: #aaa;
+    }
+    
+    a#hosbtn {
+        border-color: #10325f;
+        color: rgb(255, 255, 255);
+        border-width: 3px;
+        background-color: #10325f;
+    }
+    
+    a#hosbtn:hover {
+        background-color: inherit;
+        color: #10325f;
+        border-color: #10325f;
+    }
+</style>
+
+<body>
+
+
+    <!-- Vertical navbar -->
+    <div class="vertical-nav bg-white" id="sidebar">
+        <div class="py-4 px-3 mb-4 bg-light">
+            <div class="media d-flex align-items-center">
+                <div class="media-body">
+                    <h4 class="m-0">{{user}}</h4>
+                    <p class="font-weight-light text-muted mb-0">Teacher</p>
+                </div>
+            </div>
+        </div>
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark  bg-light">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/teacher_module/teacher_courses/" class="nav-link text-dark">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Courses
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/teacher_module/logout/" class="nav-link text-dark">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+
+    </div>
+    <!-- End vertical navbar -->
+
+
+    <!-- Page content holder -->
+    <div class="page-content p-5" id="content">
+        <!-- Toggle button -->
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm  mb-4"><i class="fa fa-bars"></i><small class="text-uppercase font-weight-bold"></small></button>
+        <br>
+        <h1 class="text-center font-italic " style="font-family:'Times New Roman', Times, serif; text-shadow:2px 2px rgb(116, 118, 128);font-size: 50px;">Assignments</h1>
+        <br>
+        <a data-toggle="modal" data-target="#donorModal" class="btn btn-outline-dark btn-lg mb-4" id="hosbtn">Add New Assignment</a>
+        <br> {%if msg %}
+        <div class="alert alert-warning alert-dismissible fade show " role="alert">
+            {{msg}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+        {% endif %}
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead class="thead">
+                        <tr>
+                            <th scope="col">Assignment Title</th>
+                            <th scope="col"></th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Branch</th>
+                            <th scope="col">Added at</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {%for i in assignment%}
+                        <tr>
+                            <td>{{i.assignment_title}}</td>
+                            <td> <a class="btn btn-outline-success" role="button" href="{{i.assignment_file.url}}">File</a></td>
+                            <td>{{i.course.course_name}}</td>
+                            <td>{{i.course.course_branch}}</td>
+                            <td>{{i.added_date}}</td>
+                            <td>{{i.due_date}}</td>
+
+
+                            <td><a class="btn btn-outline-primary" href="/teacher_module/view_all_submission?a_id={{i.assignment_id}}" role="button">Submissions</a></td>
+                            <td><a class="btn btn-outline-danger" href="/teacher_module/delete_assignment?a_id={{i.assignment_id}}" role="button">Delete</a></td>
+
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% if assignment.has_other_pages %}
+        <ul class="pagination d-flex justify-content-center mt-5">
+            {% if assignment.has_previous %}
+            <li class="page-item mr-2 "> <a class="page-link" href="?page={{ assignment.previous_page_number }}"> Previous</a> </li>
+            {% endif %} {% for i in assignment.paginator.page_range %} {% if assignment.number == i %}
+            <li class="active page-item mr-2"><a class="page-link">{{ i }}  <span class="sr-only">(current)</span></a></li>
+
+            {% else %}
+            <li class="page-item mr-2"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %} {% endfor %} {% if assignment.has_next %}
+            <li class="page-item mr-2"><a class="page-link" href="?page={{ assignment.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    <!-- End demo content -->
+    <!-- Add Volunteer Modal -->
+    <div class="modal fade" id="donorModal" tabindex="-1" role="dialog" aria-labelledby="donorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/teacher_module/add_assignment/" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label">Asssignment Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="inputEmail3" name="assignment_title" placeholder="Course Name" style="border-radius: 20px;" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputState" class="col-sm-4 col-form-label">Select Course of Assignment:</label>
+                            <div class="col-sm-8">
+                                <select id="inputState" class="form-control" style="border-radius: 20px;" name="course">
+                                    {% for i  in courses %}
+                                    <option value="{{i.course_id}}">
+                                        {{i.course_id}} - {{i.course_name}}
+                                    </option>
+                                {% endfor %}
+            </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-4 col-form-label"> Due Date</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="date" name="due_date" id="date" placeholder="Birthdate : DD/MM/YYYY" style="border-radius: 20px;" autocomplete="off" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="assignment_file" class="col-sm-4 col-form-label">Assignment File</label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control" id="assignment_file" name="assignment_file" style="border-radius: 20px;" required>
+                            </div>
+                        </div>
+
+                        <input type="submit" class="btn btn-dark btn-block mb-4" style="
+                            border-radius: 30px;
+                            width: 50%;
+                            margin: auto;
+                            box-shadow: 2px 2px 5px .1px rgb(201, 200, 200);
+                        " value="Add" />
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    $(function() {
+        // Sidebar toggle behavior
+        $('#sidebarCollapse').on('click', function() {
+            $('#sidebar, #content').toggleClass('active');
+        });
+    });
+</script>
+
+</html>

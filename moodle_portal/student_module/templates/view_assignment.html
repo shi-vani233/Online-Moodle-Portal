@@ -1,0 +1,192 @@
+<html>
+
+<head>
+
+    <title>
+        Moodle-Portal
+    </title>
+
+    {% load static %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+
+<style>
+    .vertical-nav {
+        min-width: 17rem;
+        width: 20rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s;
+    }
+    
+    .page-content {
+        width: calc(100% - 20rem);
+        margin-left: 20rem;
+        transition: all 0.4s;
+    }
+    
+    #sidebar.active {
+        margin-left: -20rem;
+    }
+    
+    #content.active {
+        width: 100%;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        #sidebar {
+            margin-left: -20rem;
+        }
+        #sidebar.active {
+            margin-left: 0;
+        }
+        #content {
+            width: 100%;
+            margin: 0;
+        }
+        #content.active {
+            margin-left: 17rem;
+            width: calc(100% - 20rem);
+        }
+    }
+    
+    body {
+        background-color: #e4e4e2;
+    }
+    
+    .separator {
+        margin: 3rem 0;
+        border-bottom: 1px dashed #fff;
+    }
+    
+    .text-uppercase {
+        letter-spacing: 0.1em;
+    }
+    
+    .text-gray {
+        color: #aaa;
+    }
+    
+    a#hosbtn {
+        border-color: #10325f;
+        color: rgb(255, 255, 255);
+        border-width: 3px;
+        background-color: #10325f;
+    }
+    
+    a#hosbtn:hover {
+        background-color: inherit;
+        color: white;
+        border-color: #ffffff;
+    }
+</style>
+
+<body>
+
+
+    <!-- Vertical navbar -->
+    <div class="vertical-nav bg-white" id="sidebar">
+        <div class="py-4 px-3 mb-4 bg-light">
+            <div class="media d-flex align-items-center">
+                <div class="media-body">
+                    <h4 class="m-0">{{user}}</h4>
+                    <p class="font-weight-light text-muted mb-0">Student</p>
+                </div>
+            </div>
+        </div>
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item">
+                <a href="/student_module/student_home/" class="nav-link text-dark ">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/student_module/student_courses/" class="nav-link text-dark ">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Courses
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/student_module/logout/" class="nav-link text-dark    ">
+                    <i class="fas fa-chevron-right mr-3 text-primary fa-fw"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+
+    </div>
+    <!-- End vertical navbar -->
+
+
+    <!-- Page content holder -->
+    <div class="page-content p-5" id="content">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4"><i class="fa fa-bars mr-2"></i><small class="text-uppercase font-weight-bold">Toggle</small></button>
+
+        <br><br><br>
+        <div class="card" style="border: 3px solid #10325f;border-radius: 20px;width: 70%;margin: auto;box-shadow: 4px 2px 7px 0px rgba(104,83,83,0.7);">
+            <form action="/student_module/upload_submission/" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Assignmnet ID:</td>
+                            <td>{{assignment.assignment_id}}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Assignmet Title:</td>
+                            <td>{{assignment.assignment_title}}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Assignment:</td>
+                            <td><a class="btn btn-outline-dark" role="button" href="{{assignment.assignment_file.url}}">View File</a></td>
+                        </tr>
+                        <tr>
+                            <td>Uploaded at:</td>
+                            <td>{{assignment.added_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Due Date:</td>
+                            <td>{{assignment.due_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Upload Submission:</td>
+                            <td>
+                                <input type="file" class="form-control" id="submission_file" name="submission_file" style="border: none;" required>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="a_id" value="{{assignment.assignment_id}}">
+                <input type="submit" class="btn btn-outline-primary btn-block mb-4" style="
+                            border-radius: 30px;
+                            width: 20%;
+                            margin: auto;
+                            box-shadow: 2px 2px 5px .1px rgb(201, 200, 200);
+                        " value="Submit" />
+            </form>
+        </div>
+
+        <!-- End demo content -->
+</body>
+<script>
+    $(function() {
+        // Sidebar toggle behavior
+        $('#sidebarCollapse').on('click', function() {
+            $('#sidebar, #content').toggleClass('active');
+        });
+    });
+</script>
+
+</html>
